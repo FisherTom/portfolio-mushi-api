@@ -7,7 +7,7 @@ connect();
 TestReport.collection
   .drop()
   .then(() => {
-    console.log("Collection dropped!!!");
+    console.log("collection dropped!");
     testReports.forEach((report) => {
       const testRep = new TestReport(report);
 

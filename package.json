@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/morgan-redgrove/portfolio-mushi-api#readme",
   "dependencies": {
+    "custom-env": "^2.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.9.2"

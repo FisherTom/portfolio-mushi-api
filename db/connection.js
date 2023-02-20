@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const ENV = process.env.TEST ? "test" : "production";
-console.log(ENV);
-require("dotenv").config({
-  path: `../.env.${ENV}`,
-});
+const enviroment = process.env.TEST ? "test" : "development";
+
+require("custom-env").env(enviroment);
 
 const connect = () => {
   mongoose.connect(process.env.MONGODB_URL, {
