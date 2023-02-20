@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const testReportSchema = mongoose.Schema({
+const ReportSchema = mongoose.Schema({
   location: Object,
   img_url: String,
   username: String,
@@ -12,4 +12,17 @@ const testReportSchema = mongoose.Schema({
   prevalence: Number,
 });
 
-module.exports = { testReportSchema };
+const MushroomSchema = mongoose.Schema({
+  commonName: String,
+  latinName: String,
+  order: String,
+  genus: String,
+  attributes: Object,
+  habitat: String,
+  months: Array,
+  colors: Array,
+  toxic: Boolean,
+  averageHeight: Number,
+});
+
+module.exports = { ReportSchema, MushroomSchema };

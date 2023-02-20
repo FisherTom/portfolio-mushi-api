@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-const { testReportSchema } = require("../schemas/schema");
+const { ReportSchema, MushroomSchema } = require("../schemas/schema");
 
-const TestReport = mongoose.model("testReport", testReportSchema);
+const Report = mongoose.model("Report", ReportSchema);
+const Mushroom = mongoose.model("Mushroom", MushroomSchema);
 
-module.exports = { TestReport };
+module.exports = { Report, Mushroom };
