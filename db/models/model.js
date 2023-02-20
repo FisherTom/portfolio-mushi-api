@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
-const { ReportSchema, MushroomSchema } = require("../schemas/schema");
+const {
+  ReportSchema,
+  MushroomSchema,
+  UserSchema,
+} = require("../schemas/schema");
 
 const Report = mongoose.model("Report", ReportSchema);
 const Mushroom = mongoose.model("Mushroom", MushroomSchema);
+const User = mongoose.model("User", UserSchema);
 
-module.exports = { Report, Mushroom };
+module.exports = { Report, Mushroom, User };

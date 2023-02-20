@@ -3,8 +3,8 @@ require("dotenv").config();
 const enviroment = process.env.TEST ? "test" : "development";
 const dataPath = `../data/${enviroment}-data`;
 
-const { Report, Mushroom } = require("../models/model");
-const { reports, mushrooms } = require(`${dataPath}/index`);
+const { Report, Mushroom, User } = require("../models/model"); // import generic models
+const { reports, mushrooms, users } = require(`${dataPath}/index`); //retriving datasets depending on ENV context
 const { connect } = require("../connection");
 
 const seedData = (Model, dataArr) => {
@@ -32,5 +32,13 @@ const seedData = (Model, dataArr) => {
 
 connect();
 
-seedData(Report, reports);
-seedData(Mushroom, mushrooms);
+const runSeed = () => {
+  // seed(model, data)
+  seedData(Report, reports);
+  seedData(Mushroom, mushrooms);
+  seedData(User, users);
+};
+
+runSeed();
+
+module.exports = { runSeed };

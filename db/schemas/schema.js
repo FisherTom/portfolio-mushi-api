@@ -25,4 +25,10 @@ const MushroomSchema = mongoose.Schema({
   averageHeight: Number,
 });
 
-module.exports = { ReportSchema, MushroomSchema };
+const UserSchema = mongoose.Schema({
+  username: String,
+  num_reports: Number,
+  avatar_url: String,
+});
+
+module.exports = { ReportSchema, MushroomSchema, UserSchema };
