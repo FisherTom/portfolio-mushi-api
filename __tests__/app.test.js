@@ -52,8 +52,8 @@ describe("GET /api/reports", () => {
       .get("/api/reports")
       .expect(200)
       .then(({ body: { reports } }) => {
-        console.log(reports);
         expect(reports.length).toBeGreaterThan(0);
+
         reports.forEach((report) => {
           expect(report.location).toEqual(expect.any(Object));
           expect(report.img_url).toEqual(expect.any(String));
@@ -64,6 +64,26 @@ describe("GET /api/reports", () => {
           expect(report.alternate_species).toEqual(expect.any(Array));
           expect(report.prevalence).toEqual(expect.any(Number));
         });
+      });
+  });
+});
+
+describe("GET /api/reports/:report_id", () => {
+  test("responds with status code 200 and report with matching id", () => {
+    return request(app)
+      .get("/api/reports")
+      .then(({ body: { reports } }) => {
+        const targetReport = reports[0];
+        return targetReport;
+      })
+      .then((targetReport) => {
+        return request(app)
+          .get(`/api/reports/${targetReport._id}`)
+          .expect(200)
+          .then(({ body: { report } }) => {
+            console.log(report, "<<<<<<<report");
+            expect(report[0]._id).toBe(targetReport._id);
+          });
       });
   });
 });
