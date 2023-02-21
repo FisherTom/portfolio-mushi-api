@@ -9,7 +9,7 @@ app.get("/api/mushrooms", getMushrooms);
 
 app.get("/api/reports", getReports);
 
-// app.use(handleRouteErrors);
+app.use(handleRouteErrors);
 
 app.use(handleServerErrors);
 

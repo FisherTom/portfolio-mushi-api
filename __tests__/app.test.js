@@ -52,6 +52,7 @@ describe("GET /api/reports", () => {
       .get("/api/reports")
       .expect(200)
       .then(({ body: { reports } }) => {
+        console.log(reports);
         expect(reports.length).toBeGreaterThan(0);
         reports.forEach((report) => {
           expect(report.location).toEqual(expect.any(Object));
