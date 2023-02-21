@@ -11,3 +11,12 @@ exports.fetchReports = () => {
     return reports;
   });
 };
+
+exports.fetchMushroomByName = (name) => {
+  return Mushroom.find({ commonName: name }).then((mushroom) => {
+    if (!mushroom.length) {
+      return Promise.reject({ status: 400, msg: "Bad request" });
+    }
+    return mushroom;
+  });
+};
