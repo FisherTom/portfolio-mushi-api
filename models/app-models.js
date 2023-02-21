@@ -1,4 +1,5 @@
 const { Mushroom, Report } = require("../db/models/model");
+const { mongoose } = require("mongoose");
 
 exports.fetchMushrooms = () => {
   return Mushroom.find({}).then((mushrooms) => {
@@ -9,6 +10,13 @@ exports.fetchMushrooms = () => {
 exports.fetchReports = () => {
   return Report.find({}).then((reports) => {
     return reports;
+  });
+};
+
+
+exports.fetchReport = (report_id) => {
+  return Report.find({ _id: report_id }).then((report) => {
+    return report;
   });
 };
 
@@ -38,3 +46,4 @@ exports.insertReport = (report) => {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
 };
+

@@ -1,6 +1,7 @@
 const {
   fetchMushrooms,
   fetchReports,
+  fetchReport,
   fetchMushroomByName,
   insertReport,
 } = require("../models/app-models");
@@ -20,6 +21,14 @@ exports.getReports = (request, response, next) => {
     })
     .catch(next);
 };
+
+
+exports.getReportById = (request, response, next) => {
+  const report_id = request.params.report_id;
+  fetchReport(report_id)
+    .then((report) => {
+      response.status(200).send({ report });
+
 
 exports.getMushroomByName = (request, response, next) => {
   const { name } = request.params;
