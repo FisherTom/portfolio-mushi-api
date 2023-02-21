@@ -84,7 +84,10 @@ describe("GET /api/reports/:report_id", () => {
             console.log(report, "<<<<<<<report");
             expect(report[0]._id).toBe(targetReport._id);
           });
-          
+      });
+  });
+});
+
 describe("GET /api/mushrooms/:name", () => {
   test("responds with status code 200 and an object in expected format", () => {
     return request(app)
