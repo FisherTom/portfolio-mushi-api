@@ -23,3 +23,24 @@ describe("GET /api/mushrooms", () => {
       });
   });
 });
+
+describe("GET /api/reports", () => {
+  test("responds with status code 200 and an object in expected format", () => {
+    return request(app)
+      .get("/api/reports")
+      .expect(200)
+      .then(({ body: { reports } }) => {
+        expect(reports.length).toBeGreaterThan(0);
+        reports.forEach((report) => {
+          expect(report.location).toEqual(expect.any(Object));
+          expect(report.img_url).toEqual(expect.any(String));
+          expect(report.username).toEqual(expect.any(String));
+          expect(report.time_stamp).toEqual(expect.any(String));
+          expect(report.species).toEqual(expect.any(Object));
+          expect(report.credibility).toEqual(expect.any(Number));
+          expect(report.alternate_species).toEqual(expect.any(Array));
+          expect(report.prevalence).toEqual(expect.any(Number));
+        });
+      });
+  });
+});
