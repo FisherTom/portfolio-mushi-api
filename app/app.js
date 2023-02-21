@@ -1,21 +1,35 @@
 const express = require("express");
 const app = express();
 
-const { handleServerErrors, handleRouteErrors } = require("../errors/");
+app.use(express.json());
+
+const {
+  handleServerErrors,
+  handleRouteErrors,
+  handleCustomErrors,
+} = require("../errors/");
 
 const {
   getMushrooms,
   getReports,
+  getMushroomByName,
   getReportById,
+  postReport,
 } = require("../controllers/app-controllers");
 
 app.get("/api/mushrooms", getMushrooms);
+
+app.get("/api/mushrooms/:name", getMushroomByName);
 
 app.get("/api/reports", getReports);
 
 app.get("/api/reports/:report_id", getReportById);
 
+app.post("/api/reports", postReport);
+
 app.use(handleRouteErrors);
+
+app.use(handleCustomErrors);
 
 app.use(handleServerErrors);
 
