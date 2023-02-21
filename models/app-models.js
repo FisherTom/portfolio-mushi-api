@@ -20,3 +20,21 @@ exports.fetchMushroomByName = (name) => {
     return mushroom;
   });
 };
+
+exports.insertReport = (report) => {
+  const keys = ["location", "img_url", "username", "time_stamp", "species"];
+
+  const greenlight = keys.every((key) => {
+    return report.hasOwnProperty(key);
+  });
+
+  if (greenlight) {
+    report.credibility = 0;
+    report.alternate_species = [];
+
+    const newReport = new Report(report);
+    return newReport.save();
+  } else {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+};

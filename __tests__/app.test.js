@@ -97,3 +97,47 @@ describe("GET /api/mushrooms/:name", () => {
       });
   });
 });
+
+describe("POST /api/report", () => {
+  test("responds with status code 201 and an object in expected format", () => {
+    return request(app)
+      .post("/api/reports")
+      .send({
+        report: {
+          location: { lat: 0.0, long: 0.0 },
+          img_url: "https://example.com/mushroom1.jpg",
+          username: "user1",
+          time_stamp: "2023-01-01T00:00:00Z",
+          notes: "This is a test",
+          species: { species: "Common Mushroom", votes: 1 },
+          prevalence: 1.0,
+        },
+      })
+      .expect(201)
+      .then(({ _body: { report } }) => {
+        console.log(report);
+        expect(report.location).toEqual({ lat: 0.0, long: 0.0 });
+        expect(report.img_url).toBe("https://example.com/mushroom1.jpg");
+        expect(report.username).toBe("user1");
+        expect(report.time_stamp).toBe("2023-01-01T00:00:00Z");
+        expect(report.species).toEqual({
+          species: "Common Mushroom",
+          votes: 1,
+        });
+        expect(report.credibility).toEqual(expect.any(Number));
+        expect(report.alternate_species).toEqual(expect.any(Array));
+        expect(report.prevalence).toBe(1.0);
+      });
+  });
+  test("responds with status code 400 when provided a report with missing keys", () => {
+    return request(app)
+      .post("/api/reports")
+      .send({
+        report: {},
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+});

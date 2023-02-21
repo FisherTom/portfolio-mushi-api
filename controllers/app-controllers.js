@@ -2,6 +2,7 @@ const {
   fetchMushrooms,
   fetchReports,
   fetchMushroomByName,
+  insertReport,
 } = require("../models/app-models");
 
 exports.getMushrooms = (request, response, next) => {
@@ -22,10 +23,18 @@ exports.getReports = (request, response, next) => {
 
 exports.getMushroomByName = (request, response, next) => {
   const { name } = request.params;
-  console.log(name);
   fetchMushroomByName(name)
     .then((mushrooms) => {
       response.status(200).send({ mushrooms });
+    })
+    .catch(next);
+};
+
+exports.postReport = (request, response, next) => {
+  const { report } = request.body;
+  insertReport(report)
+    .then((report) => {
+      response.status(201).send({ report });
     })
     .catch(next);
 };

@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 const {
   handleServerErrors,
   handleRouteErrors,
@@ -11,6 +13,7 @@ const {
   getMushrooms,
   getReports,
   getMushroomByName,
+  postReport,
 } = require("../controllers/app-controllers");
 
 app.get("/api/mushrooms", getMushrooms);
@@ -18,6 +21,8 @@ app.get("/api/mushrooms", getMushrooms);
 app.get("/api/mushrooms/:name", getMushroomByName);
 
 app.get("/api/reports", getReports);
+
+app.post("/api/reports", postReport);
 
 app.use(handleRouteErrors);
 
