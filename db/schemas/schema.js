@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { db } = require("../connection");
 
-const ReportSchema = mongoose.Schema({
+const ReportSchema = new mongoose.Schema({
   location: Object,
   img_url: String,
   username: String,
@@ -12,7 +13,7 @@ const ReportSchema = mongoose.Schema({
   prevalence: Number,
 });
 
-const MushroomSchema = mongoose.Schema({
+const MushroomSchema = new mongoose.Schema({
   commonName: String,
   latinName: String,
   order: String,
@@ -25,7 +26,7 @@ const MushroomSchema = mongoose.Schema({
   averageHeight: Number,
 });
 
-const UserSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: String,
   num_reports: Number,
   avatar_url: String,

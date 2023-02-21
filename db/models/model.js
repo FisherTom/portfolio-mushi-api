@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { db } = require("../connection");
+
 const {
   ReportSchema,
   MushroomSchema,
