@@ -81,9 +81,24 @@ describe("GET /api/reports/:report_id", () => {
           .get(`/api/reports/${targetReport._id}`)
           .expect(200)
           .then(({ body: { report } }) => {
-            console.log(report, "<<<<<<<report");
             expect(report[0]._id).toBe(targetReport._id);
           });
+      });
+  });
+  test("404 not found when given non-existant id", () => {
+    return request(app)
+      .get("/api/reports/63f4e4c9c133f17e6b7fe312")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not Found");
+      });
+  });
+  test("400 when given bad id", () => {
+    return request(app)
+      .get("/api/reports/xxx")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
       });
   });
 });
@@ -136,7 +151,6 @@ describe("POST /api/report", () => {
       })
       .expect(201)
       .then(({ _body: { report } }) => {
-        console.log(report);
         expect(report.location).toEqual({ lat: 0.0, long: 0.0 });
         expect(report.img_url).toBe("https://example.com/mushroom1.jpg");
         expect(report.username).toBe("user1");

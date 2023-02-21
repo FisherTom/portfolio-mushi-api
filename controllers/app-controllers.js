@@ -24,9 +24,11 @@ exports.getReports = (request, response, next) => {
 
 exports.getReportById = (request, response, next) => {
   const report_id = request.params.report_id;
-  fetchReport(report_id).then((report) => {
-    response.status(200).send({ report });
-  });
+  fetchReport(report_id)
+    .then((report) => {
+      response.status(200).send({ report });
+    })
+    .catch(next);
 };
 
 exports.getMushroomByName = (request, response, next) => {

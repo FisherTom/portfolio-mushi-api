@@ -1,5 +1,5 @@
 const { Mushroom, Report } = require("../db/models/model");
-const { mongoose } = require("mongoose");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 exports.fetchMushrooms = () => {
   return Mushroom.find({}).then((mushrooms) => {
@@ -13,9 +13,15 @@ exports.fetchReports = () => {
   });
 };
 
-
 exports.fetchReport = (report_id) => {
+  if (!ObjectId.isValid(report_id)) {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
+
   return Report.find({ _id: report_id }).then((report) => {
+    if (report.length === 0) {
+      return Promise.reject({ status: 404, msg: "Not Found" });
+    }
     return report;
   });
 };
@@ -46,4 +52,3 @@ exports.insertReport = (report) => {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
 };
-
