@@ -13,13 +13,24 @@ afterAll(() => {
 });
 
 describe("GET /api/mushrooms", () => {
-  test("200: resolves with a mushrooms array", () => {
+  test("responds with status code 200 and an object in expected format", () => {
     return request(app)
       .get("/api/mushrooms")
       .expect(200)
       .then(({ body: { mushrooms } }) => {
-        expect(mushrooms).toBeInstanceOf(Array);
-        expect(mushrooms).toHaveLength(27);
+        expect(mushrooms.length).toBeGreaterThan(0);
+        mushrooms.forEach((mushroom) => {
+          expect(mushroom.commonName).toEqual(expect.any(String));
+          expect(mushroom.latinName).toEqual(expect.any(String));
+          expect(mushroom.order).toEqual(expect.any(String));
+          expect(mushroom.genus).toEqual(expect.any(String));
+          expect(mushroom.attributes).toEqual(expect.any(Object));
+          expect(mushroom.habitat).toEqual(expect.any(String));
+          expect(mushroom.months).toEqual(expect.any(Array));
+          expect(mushroom.colors).toEqual(expect.any(Array));
+          expect(mushroom.toxic).toEqual(expect.any(Boolean));
+          expect(mushroom.averageHeight).toEqual(expect.any(Number));
+        });
       });
   });
 });
