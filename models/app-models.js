@@ -88,10 +88,23 @@ exports.updateReport = (report_id, suggestedSpecies) => {
             });
           }
 
+          let totalVotes = 0;
+          let topVoted = { votes: 0 };
+
+          report.alternate_species.forEach(({ species, votes }) => {
+            totalVotes += votes;
+            if (votes > topVoted.votes) {
+              topVoted = { species, votes };
+            }
+          });
+          const credibility = topVoted.votes / totalVotes;
+
           return Report.findByIdAndUpdate(
             report_id,
             {
               alternate_species: [...report.alternate_species],
+              species: topVoted,
+              credibility,
             },
             { new: true }
           ).then((updatedReport) => {
