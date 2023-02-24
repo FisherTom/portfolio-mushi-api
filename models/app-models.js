@@ -1,3 +1,4 @@
+const { report } = require("../app/app");
 const { Mushroom, Report } = require("../db/models/model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -51,4 +52,51 @@ exports.insertReport = (report) => {
   } else {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
+};
+
+exports.updateReport = (report_id, suggestedSpecies) => {
+  if (!ObjectId.isValid(report_id)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  return Mushroom.find({ commonName: suggestedSpecies })
+    .then((mushroom) => {
+      if (!mushroom.length) {
+        return Promise.reject({ status: 400, msg: "Bad request" });
+      }
+    })
+    .then(() => {
+      return Report.find({ _id: report_id })
+        .then((report) => {
+          return report[0];
+        })
+        .then((report) => {
+          const prevSuggested = report.alternate_species.some(({ species }) => {
+            return species === suggestedSpecies;
+          });
+
+          if (prevSuggested) {
+            report.alternate_species.forEach(({ species }, index) => {
+              if (species === suggestedSpecies) {
+                report.alternate_species[index].votes += 1;
+              }
+            });
+          } else {
+            report.alternate_species.push({
+              species: suggestedSpecies,
+              votes: 1,
+            });
+          }
+
+          return Report.findByIdAndUpdate(
+            report_id,
+            {
+              alternate_species: [...report.alternate_species],
+            },
+            { new: true }
+          ).then((updatedReport) => {
+            return updatedReport;
+          });
+        });
+    });
 };

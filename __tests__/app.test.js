@@ -176,3 +176,87 @@ describe("POST /api/report", () => {
       });
   });
 });
+
+describe("PATCH /api/report/:report_id", () => {
+  test("responds with status code 201 and an object with the appropriate vote count updated", () => {
+    const suggestedSpecies = "Fly Agaric";
+    let prevVotes = 0;
+    let targetReport = {};
+
+    return request(app)
+      .get("/api/reports")
+      .then(({ body: { reports } }) => {
+        targetReport = reports[0];
+        prevVotes =
+          targetReport.alternate_species.filter((species) => {
+            return species.species === suggestedSpecies;
+          })[0]?.votes ?? 0;
+      })
+      .then(() => {
+        return request(app)
+          .patch(`/api/reports/${targetReport._id}`)
+          .send({ suggestedSpecies })
+          .expect(201)
+          .then(
+            ({
+              body: {
+                report: { alternate_species },
+              },
+            }) => {
+              updatedVotes = alternate_species.filter((species) => {
+                return species.species === suggestedSpecies;
+              })[0].votes;
+              expect(updatedVotes).toBe(prevVotes + 1);
+            }
+          );
+      });
+  });
+  test("responds with status code 400 when provided a report_id that doesn't exist", () => {
+    const suggestedSpecies = "Fly Agaric";
+    let prevVotes = 0;
+    let targetReport = {};
+
+    return request(app)
+      .get("/api/reports")
+      .then(({ body: { reports } }) => {
+        targetReport = reports[0];
+        prevVotes =
+          targetReport.alternate_species.filter((species) => {
+            return species.species === suggestedSpecies;
+          })[0]?.votes ?? 0;
+      })
+      .then(() => {
+        return request(app)
+          .patch("/api/reports/999999")
+          .send({ suggestedSpecies })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad request");
+          });
+      });
+  });
+  test("responds with status code 400 when provided a mushroom that doesn't exist", () => {
+    const suggestedSpecies = "Not a Mushroom";
+    let prevVotes = 0;
+    let targetReport = {};
+
+    return request(app)
+      .get("/api/reports")
+      .then(({ body: { reports } }) => {
+        targetReport = reports[0];
+        prevVotes =
+          targetReport.alternate_species.filter((species) => {
+            return species.species === suggestedSpecies;
+          })[0]?.votes ?? 0;
+      })
+      .then(() => {
+        return request(app)
+          .patch(`/api/reports/${targetReport._id}`)
+          .send({ suggestedSpecies })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad request");
+          });
+      });
+  });
+});

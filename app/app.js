@@ -15,6 +15,7 @@ const {
   getMushroomByName,
   getReportById,
   postReport,
+  patchReport,
 } = require("../controllers/app-controllers");
 
 app.get("/api/mushrooms", getMushrooms);
@@ -26,6 +27,8 @@ app.get("/api/reports", getReports);
 app.get("/api/reports/:report_id", getReportById);
 
 app.post("/api/reports", postReport);
+
+app.patch("/api/reports/:report_id", patchReport);
 
 app.use(handleRouteErrors);
 
