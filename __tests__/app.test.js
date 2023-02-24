@@ -178,8 +178,8 @@ describe("POST /api/report", () => {
 });
 
 describe("PATCH /api/report/:report_id", () => {
-  test("responds with status code 201 and an object with the appropriate vote count updated", () => {
-    const suggestedSpecies = "Fly Agaric";
+  test("responds with status code 201 and an object with the species, credibility and appropriate vote count updated", () => {
+    const suggestedSpecies = "Shaggy Ink Cap";
     let prevVotes = 0;
     let targetReport = {};
 
@@ -200,12 +200,14 @@ describe("PATCH /api/report/:report_id", () => {
           .then(
             ({
               body: {
-                report: { alternate_species },
+                report: { species, credibility, alternate_species },
               },
             }) => {
               updatedVotes = alternate_species.filter((species) => {
                 return species.species === suggestedSpecies;
               })[0].votes;
+              expect(species).toEqual({ species: "Shaggy Ink Cap", votes: 2 });
+              expect(credibility).toBe(66);
               expect(updatedVotes).toBe(prevVotes + 1);
             }
           );
