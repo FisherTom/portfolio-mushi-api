@@ -97,7 +97,7 @@ exports.updateReport = (report_id, suggestedSpecies) => {
               topVoted = { species, votes };
             }
           });
-          const credibility = topVoted.votes / totalVotes;
+          const credibility = Math.floor((topVoted.votes / totalVotes) * 100);
 
           return Report.findByIdAndUpdate(
             report_id,
