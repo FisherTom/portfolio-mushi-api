@@ -28,7 +28,7 @@ app.get("/api/reports/:report_id", getReportById);
 
 app.post("/api/reports", postReport);
 
-app.patch(".api.reports/:report_id", patchReport);
+app.patch("/api/reports/:report_id", patchReport);
 
 app.use(handleRouteErrors);
 
