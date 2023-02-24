@@ -48,3 +48,13 @@ exports.postReport = (request, response, next) => {
     })
     .catch(next);
 };
+
+exports.patchReport = (request, response, next) => {
+  const report_id = request.params.report_id;
+  const { suggestedSpecies } = request.body;
+  updateReport(report_id)
+    .then((report) => {
+      response.status(201).send({ report });
+    })
+    .catch(next);
+};

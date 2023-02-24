@@ -176,3 +176,38 @@ describe("POST /api/report", () => {
       });
   });
 });
+
+describe("PATCH /api/report/:report_id", () => {
+  test("responds with status code 201 and an object in expected format", () => {
+    return request(app)
+      .patch("/api/reports/:report_id")
+      .send({
+        suggestedSpecies: "Common Mushroom",
+      })
+      .expect(201)
+      .then(({ _body: { report } }) => {
+        expect(report.location).toEqual({ lat: 0.0, long: 0.0 });
+        expect(report.img_url).toBe("https://example.com/mushroom1.jpg");
+        expect(report.username).toBe("user1");
+        expect(report.time_stamp).toBe("2023-01-01T00:00:00Z");
+        expect(report.species).toEqual({
+          species: "Common Mushroom",
+          votes: 2,
+        });
+        expect(report.credibility).toEqual(expect.any(Number));
+        expect(report.alternate_species).toEqual(expect.any(Array));
+        expect(report.prevalence).toBe(1.0);
+      });
+  });
+  test("responds with status code 400 when provided a report with missing keys", () => {
+    return request(app)
+      .post("/api/reports")
+      .send({
+        report: {},
+      })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+});

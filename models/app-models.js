@@ -1,3 +1,4 @@
+const { report } = require("../app/app");
 const { Mushroom, Report } = require("../db/models/model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -51,4 +52,20 @@ exports.insertReport = (report) => {
   } else {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
+};
+
+exports.updateReport = (report_id, suggestedSpecies) => {
+  this.fetchReport(report_id).then((report) => {
+    const prevSuggested = report.alternate_species.some(({ species }) => {
+      return species === suggestedSpecies;
+    });
+
+    if (prevSuggested) {
+      report.alternate_species.forEach(({ species, votes }) => {
+        if (species === suggestedSpecies) {
+          votes += 1;
+        }
+      });
+    }
+  });
 };
