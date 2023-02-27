@@ -44,8 +44,8 @@ exports.insertReport = (report) => {
   });
 
   if (greenlight) {
-    report.credibility = 0;
-    report.alternate_species = [];
+    report.credibility = 100;
+    report.alternate_species = [report.species];
 
     const newReport = new Report(report);
     return newReport.save();
