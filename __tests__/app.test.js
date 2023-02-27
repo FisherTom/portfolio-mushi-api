@@ -1,8 +1,8 @@
 const request = require("supertest");
 const app = require("../app/app");
+const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/");
 const mongoose = require("mongoose");
-const seed = require("../db/seeds/seed");
 
 beforeEach(() => {
   return seed(testData);
@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("GET /api/notARoute", () => {
-  test("404: Not found for route that does not exist", () => {
+  test("responds with status code 404 when provided a route that doesn't exist", () => {
     return request(app)
       .get("/api/notaroute")
       .expect(404)
@@ -89,7 +89,7 @@ describe("GET /api/reports/:report_id", () => {
       .get("/api/reports/63f4e4c9c133f17e6b7fe312")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Not Found");
+        expect(msg).toBe("Not found");
       });
   });
   test("400 when given bad id", () => {
@@ -97,7 +97,7 @@ describe("GET /api/reports/:report_id", () => {
       .get("/api/reports/xxx")
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad Request");
+        expect(msg).toBe("Bad request");
       });
   });
 });
@@ -283,7 +283,7 @@ describe("DELETE /api/report/:report_id", () => {
               .get(`/api/reports/${targetReport._id}`)
               .expect(404)
               .then(({ body: { msg } }) => {
-                expect(msg).toBe("Not Found");
+                expect(msg).toBe("Not found");
               });
           });
       });
