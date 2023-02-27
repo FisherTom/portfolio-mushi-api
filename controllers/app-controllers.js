@@ -56,7 +56,6 @@ exports.patchReport = (request, response, next) => {
 
   updateReport(report_id, suggestedSpecies)
     .then((report) => {
-      console.log(report);
       response.status(201).send({ report });
     })
     .catch(next);

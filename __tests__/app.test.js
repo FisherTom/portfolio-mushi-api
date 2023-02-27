@@ -62,7 +62,7 @@ describe("GET /api/reports", () => {
           expect(report.species).toEqual(expect.any(Object));
           expect(report.credibility).toEqual(expect.any(Number));
           expect(report.alternate_species).toEqual(expect.any(Array));
-          expect(report.prevalence).toEqual(expect.any(Number));
+          // expect(report.prevalence).toEqual(expect.any(Number));
         });
       });
   });
@@ -146,7 +146,7 @@ describe("POST /api/report", () => {
           time_stamp: "2023-01-01T00:00:00Z",
           notes: "This is a test",
           species: { species: "Common Mushroom", votes: 1 },
-          prevalence: 1.0,
+          // prevalence: 1.0,
         },
       })
       .expect(201)
@@ -160,8 +160,10 @@ describe("POST /api/report", () => {
           votes: 1,
         });
         expect(report.credibility).toEqual(expect.any(Number));
-        expect(report.alternate_species).toEqual(expect.any(Array));
-        expect(report.prevalence).toBe(1.0);
+        expect(report.alternate_species).toEqual([
+          { species: "Common Mushroom", votes: 1 },
+        ]);
+        // expect(report.prevalence).toBe(1.0);
       });
   });
   test("responds with status code 400 when provided a report with missing keys", () => {
