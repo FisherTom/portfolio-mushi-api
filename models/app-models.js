@@ -113,3 +113,13 @@ exports.updateReport = (report_id, suggestedSpecies) => {
         });
     });
 };
+
+exports.removeReport = (report_id) => {
+  if (!ObjectId.isValid(report_id)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  return Report.findByIdAndDelete(report_id).then((deletedReport) => {
+    return deletedReport;
+  });
+};
