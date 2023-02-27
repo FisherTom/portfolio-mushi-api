@@ -16,12 +16,12 @@ exports.fetchReports = () => {
 
 exports.fetchReport = (report_id) => {
   if (!ObjectId.isValid(report_id)) {
-    return Promise.reject({ status: 400, msg: "Bad Request" });
+    return Promise.reject({ status: 400, msg: "Bad request" });
   }
 
   return Report.find({ _id: report_id }).then((report) => {
     if (report.length === 0) {
-      return Promise.reject({ status: 404, msg: "Not Found" });
+      return Promise.reject({ status: 404, msg: "Not found" });
     }
     return report;
   });
@@ -48,6 +48,7 @@ exports.insertReport = (report) => {
     report.alternate_species = [report.species];
 
     const newReport = new Report(report);
+
     return newReport.save();
   } else {
     return Promise.reject({ status: 400, msg: "Bad request" });
@@ -55,61 +56,63 @@ exports.insertReport = (report) => {
 };
 
 exports.updateReport = (report_id, suggestedSpecies) => {
+  return this.fetchMushroomByName(suggestedSpecies)
+    .then(() => {
+      return this.fetchReport(report_id);
+    })
+    .then((report) => {
+      return report[0];
+    })
+    .then((report) => {
+      const prevSuggested = report.alternate_species.some(({ species }) => {
+        return species === suggestedSpecies;
+      });
+
+      if (prevSuggested) {
+        report.alternate_species.forEach(({ species }, index) => {
+          if (species === suggestedSpecies) {
+            report.alternate_species[index].votes += 1;
+          }
+        });
+      } else {
+        report.alternate_species.push({
+          species: suggestedSpecies,
+          votes: 1,
+        });
+      }
+
+      let totalVotes = 0;
+      let topVoted = { votes: 0 };
+
+      report.alternate_species.forEach(({ species, votes }) => {
+        totalVotes += votes;
+        if (votes > topVoted.votes) {
+          topVoted = { species, votes };
+        }
+      });
+
+      const credibility = Math.floor((topVoted.votes / totalVotes) * 100);
+
+      return Report.findByIdAndUpdate(
+        report_id,
+        {
+          alternate_species: [...report.alternate_species],
+          species: topVoted,
+          credibility,
+        },
+        { new: true }
+      ).then((updatedReport) => {
+        return updatedReport;
+      });
+    });
+};
+
+exports.removeReport = (report_id) => {
   if (!ObjectId.isValid(report_id)) {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
 
-  return Mushroom.find({ commonName: suggestedSpecies })
-    .then((mushroom) => {
-      if (!mushroom.length) {
-        return Promise.reject({ status: 400, msg: "Bad request" });
-      }
-    })
-    .then(() => {
-      return Report.find({ _id: report_id })
-        .then((report) => {
-          return report[0];
-        })
-        .then((report) => {
-          const prevSuggested = report.alternate_species.some(({ species }) => {
-            return species === suggestedSpecies;
-          });
-
-          if (prevSuggested) {
-            report.alternate_species.forEach(({ species }, index) => {
-              if (species === suggestedSpecies) {
-                report.alternate_species[index].votes += 1;
-              }
-            });
-          } else {
-            report.alternate_species.push({
-              species: suggestedSpecies,
-              votes: 1,
-            });
-          }
-
-          let totalVotes = 0;
-          let topVoted = { votes: 0 };
-
-          report.alternate_species.forEach(({ species, votes }) => {
-            totalVotes += votes;
-            if (votes > topVoted.votes) {
-              topVoted = { species, votes };
-            }
-          });
-          const credibility = Math.floor((topVoted.votes / totalVotes) * 100);
-
-          return Report.findByIdAndUpdate(
-            report_id,
-            {
-              alternate_species: [...report.alternate_species],
-              species: topVoted,
-              credibility,
-            },
-            { new: true }
-          ).then((updatedReport) => {
-            return updatedReport;
-          });
-        });
-    });
+  return Report.findByIdAndDelete(report_id).then((deletedReport) => {
+    return deletedReport;
+  });
 };

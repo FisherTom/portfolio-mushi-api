@@ -1,8 +1,8 @@
 const request = require("supertest");
 const app = require("../app/app");
+const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/");
 const mongoose = require("mongoose");
-const seed = require("../db/seeds/seed");
 
 beforeEach(() => {
   return seed(testData);
@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("GET /api/notARoute", () => {
-  test("404: Not found for route that does not exist", () => {
+  test("responds with status code 404 when provided a route that doesn't exist", () => {
     return request(app)
       .get("/api/notaroute")
       .expect(404)
@@ -62,7 +62,6 @@ describe("GET /api/reports", () => {
           expect(report.species).toEqual(expect.any(Object));
           expect(report.credibility).toEqual(expect.any(Number));
           expect(report.alternate_species).toEqual(expect.any(Array));
-          // expect(report.prevalence).toEqual(expect.any(Number));
         });
       });
   });
@@ -90,7 +89,7 @@ describe("GET /api/reports/:report_id", () => {
       .get("/api/reports/63f4e4c9c133f17e6b7fe312")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Not Found");
+        expect(msg).toBe("Not found");
       });
   });
   test("400 when given bad id", () => {
@@ -98,7 +97,7 @@ describe("GET /api/reports/:report_id", () => {
       .get("/api/reports/xxx")
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad Request");
+        expect(msg).toBe("Bad request");
       });
   });
 });
@@ -146,7 +145,6 @@ describe("POST /api/report", () => {
           time_stamp: "2023-01-01T00:00:00Z",
           notes: "This is a test",
           species: { species: "Common Mushroom", votes: 1 },
-          // prevalence: 1.0,
         },
       })
       .expect(201)
@@ -163,7 +161,6 @@ describe("POST /api/report", () => {
         expect(report.alternate_species).toEqual([
           { species: "Common Mushroom", votes: 1 },
         ]);
-        // expect(report.prevalence).toBe(1.0);
       });
   });
   test("responds with status code 400 when provided a report with missing keys", () => {
@@ -231,7 +228,7 @@ describe("PATCH /api/report/:report_id", () => {
       })
       .then(() => {
         return request(app)
-          .patch("/api/reports/999999")
+          .patch("/api/reports/9999")
           .send({ suggestedSpecies })
           .expect(400)
           .then(({ body: { msg } }) => {
@@ -257,6 +254,51 @@ describe("PATCH /api/report/:report_id", () => {
         return request(app)
           .patch(`/api/reports/${targetReport._id}`)
           .send({ suggestedSpecies })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad request");
+          });
+      });
+  });
+});
+
+describe("DELETE /api/report/:report_id", () => {
+  test("responds with status code 200 and the deleted report", () => {
+    let targetReport = {};
+
+    return request(app)
+      .get("/api/reports")
+      .then(({ body: { reports } }) => {
+        targetReport = reports[0];
+      })
+      .then(() => {
+        return request(app)
+          .delete(`/api/reports/${targetReport._id}`)
+          .expect(200)
+          .then(({ body: { report } }) => {
+            expect(report).toEqual(targetReport);
+          })
+          .then(() => {
+            return request(app)
+              .get(`/api/reports/${targetReport._id}`)
+              .expect(404)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe("Not found");
+              });
+          });
+      });
+  });
+  test("responds with status code 400 when provided a report_id that doesn't exist", () => {
+    let targetReport = {};
+
+    return request(app)
+      .get("/api/reports")
+      .then(({ body: { reports } }) => {
+        targetReport = reports[0];
+      })
+      .then(() => {
+        return request(app)
+          .delete("/api/reports/9999")
           .expect(400)
           .then(({ body: { msg } }) => {
             expect(msg).toBe("Bad request");

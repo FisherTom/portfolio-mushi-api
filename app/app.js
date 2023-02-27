@@ -16,6 +16,7 @@ const {
   getReportById,
   postReport,
   patchReport,
+  deleteReport,
 } = require("../controllers/app-controllers");
 
 app.get("/api/mushrooms", getMushrooms);
@@ -29,6 +30,8 @@ app.get("/api/reports/:report_id", getReportById);
 app.post("/api/reports", postReport);
 
 app.patch("/api/reports/:report_id", patchReport);
+
+app.delete("/api/reports/:report_id", deleteReport);
 
 app.use(handleRouteErrors);
 
