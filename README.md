@@ -35,7 +35,8 @@ Below is a more detailed description of the available API endpoints:
 ### Mushroom Endpoints
 -GET /api/mushrooms: Fetch all mushrooms.
 Response: An array of mushroom objects containing details such as common name, latin name, attributes, habitat, etc.
-json```
+json
+```
 {
   "mushrooms": [
     {
@@ -45,7 +46,8 @@ json```
     },
     ...
   ]
-}```
+}
+```
 - GET /api/mushrooms/:name: Fetch a mushroom by its common name.
 URL Parameter: name - The common name of the mushroom.
 Response: An array of mushroom objects that match the specified common name.
@@ -136,7 +138,6 @@ These endpoints allow users to retrieve, create, update, and delete information 
 Here's an example of the data structure for a mushroom:
 
 json```
-
 {
   "commonName": "Common Mushroom",
   "latinName": "Agaricus bisporus",
@@ -154,6 +155,7 @@ json```
   "toxic": false,
   "averageHeight": 80
 }```
+
 Here's an example of the data structure for a report:
 
 json```
