@@ -12,20 +12,24 @@ This API allows users to identify mushrooms by providing information about the m
 To get started with the Mushroom Identification API, follow these steps:
 
 Clone the repository:
-bash```
-git clone https://github.com/yourusername/mushroom-identification-api```
+```
+git clone https://github.com/yourusername/mushroom-identification-api
+```
 
 Change to the project directory:
-bash```
-cd mushroom-identification-api```
+```
+cd mushroom-identification-api
+```
 
 Install the dependencies:
-bash```
-npm install```
+```
+npm install
+```
 
 Start the server:
-bash```
-npm start```
+```
+npm start
+```
 
 The API will now be running on http://localhost:3000.
 
@@ -35,7 +39,7 @@ Below is a more detailed description of the available API endpoints:
 ### Mushroom Endpoints
 -GET /api/mushrooms: Fetch all mushrooms.
 Response: An array of mushroom objects containing details such as common name, latin name, attributes, habitat, etc.
-json
+
 ```
 {
   "mushrooms": [
@@ -51,7 +55,7 @@ json
 - GET /api/mushrooms/:name: Fetch a mushroom by its common name.
 URL Parameter: name - The common name of the mushroom.
 Response: An array of mushroom objects that match the specified common name.
-json
+
 ```
 {
   "mushrooms": [
@@ -66,7 +70,7 @@ json
 ### Report Endpoints
 -GET /api/reports: Fetch all reports.
 Response: An array of report objects containing details such as location, image URL, username, timestamp, species, etc.
-json
+
 ```
 {
   "reports": [
@@ -82,7 +86,7 @@ json
 - GET /api/reports/:report_id: Fetch a report by its ID.
 URL Parameter: report_id - The ID of the report.
 Response: A report object containing details such as location, image URL, username, timestamp, species, etc.
-json
+
 ```
 {
   "report": {
@@ -95,7 +99,7 @@ json
 - POST /api/reports: Create a new report.
 Request Body: A report object with required keys (location, img_url, username, time_stamp, and species).
 Response: The created report object.
-json
+
 ```
 {
   "report": {
@@ -109,7 +113,7 @@ json
 URL Parameter: report_id - The ID of the report.
 Request Body: An object containing the suggestedSpecies key.
 Response: The updated report object.
-json
+
 ```
 {
   "report": {
@@ -122,7 +126,7 @@ json
 - DELETE /api/reports/:report_id: Delete a report by its ID.
 URL Parameter: report_id - The ID of the report.
 Response: The deleted report object.
-json
+
 ```
 {
   "report": {
@@ -137,7 +141,7 @@ These endpoints allow users to retrieve, create, update, and delete information 
 ## Example Data
 Here's an example of the data structure for a mushroom:
 
-json```
+```
 {
   "commonName": "Common Mushroom",
   "latinName": "Agaricus bisporus",
@@ -154,12 +158,12 @@ json```
   "colors": ["White", "Brown"],
   "toxic": false,
   "averageHeight": 80
-}```
+}
+```
 
 Here's an example of the data structure for a report:
 
-json```
-
+```
 {
   "location": { "lat": 54.597, "long": -5.9301 },
   "img_url": "https://example.com/mushroom1.jpg",
@@ -173,7 +177,8 @@ json```
     { "species": "Shaggy Ink Cap", "votes": 1 }
   ],
   "prevalence": 0.1
-}```
+}
+```
 
 ## Contributing
 Please feel free to submit issues or pull requests for any bugs or feature requests.
