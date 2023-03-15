@@ -180,8 +180,4 @@ Here's an example of the data structure for a report:
 }
 ```
 
-## Contributing
-Please feel free to submit issues or pull requests for any bugs or feature requests.
 
-## License
-This project is licensed under the MIT License.
